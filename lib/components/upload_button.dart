@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/services/auth_services.dart';
+import 'package:noteapp/views/graph_view.dart';
 import 'package:noteapp/views/home_view.dart';
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+class UploadButton extends StatelessWidget {
+  const UploadButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        AuthService().signInWithGoogle();
+        //FileService().uploadCSV();
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 600),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const HomeView(),
+                const GraphView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return SlideTransition(
@@ -37,7 +38,7 @@ class LoginButton extends StatelessWidget {
         ),
         child: const Center(
             child: Text(
-          "Sign in with Google",
+          "Upload Bank Statement",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,

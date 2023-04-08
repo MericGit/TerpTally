@@ -7,24 +7,28 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 227, 157, 157),
+        backgroundColor: const Color(0xff6987C9),
         body: SafeArea(
           child: Center(
             child: Column(
-              children: const [
-                SizedBox(height: 50),
+              children: [
+                const SizedBox(height: 50),
                 // logo
-                Icon(
-                  Icons.lock,
-                  size: 200,
-                ),
-                SizedBox(height: 400),
-                LoginButton(),
-
-                //Login with Google text
-                //Firebase uath button
-
-                //Copyright spec info
+                SizedBox(
+                    height: 200,
+                    width: 250,
+                    child: Image.asset('assets/images/TerpTally.png')),
+                const SizedBox(height: 400),
+                const LoginButton(),
+                const SizedBox(height: 70),
+                const Text(
+                  "A bitcamp 2023 project",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
               ],
             ),
           ),

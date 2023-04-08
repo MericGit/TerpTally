@@ -6,19 +6,19 @@ class AuthService {
 GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
 Future<UserCredential> signInWithGoogle() async {
-  // Create a new provider
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  GoogleAuthProvider googleProvider = GoogleAuthProvider();
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-  googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-  googleProvider.setCustomParameters({
-    'login_hint': 'user@example.com'
-  });
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
 
   // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-
-  // Or use signInWithRedirect
-  // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 }

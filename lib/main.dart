@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:noteapp/views/graph_view.dart';
+import 'package:noteapp/views/home_view.dart';
 import 'package:noteapp/views/login_view.dart';
 
 import 'firebase_options.dart';
@@ -15,6 +17,11 @@ void main() async {
         primarySwatch: Colors.blue,
       ),
       home: const LoginView(),
+      routes: {
+        '/login/': (context) => const LoginView(),
+        '/home/': (context) => const HomeView(),
+        '/graph/': (context) => const GraphView(),
+      },
     ),
   );
 }
