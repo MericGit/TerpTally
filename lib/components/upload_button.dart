@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:noteapp/services/auth_services.dart';
+import 'package:noteapp/services/convert_file_service.dart';
+import 'package:noteapp/views/chart_view.dart';
 import 'package:noteapp/views/graph_view.dart';
 import 'package:noteapp/views/home_view.dart';
+import 'package:noteapp/views/login_view.dart';
+
+import '../services/file_upload_service.dart';
 
 class UploadButton extends StatelessWidget {
   const UploadButton({super.key});
@@ -10,12 +15,11 @@ class UploadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        //FileService().uploadCSV();
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).push(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 600),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const GraphView(),
+                const PieChart(title: 'title'),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return SlideTransition(
@@ -28,6 +32,7 @@ class UploadButton extends StatelessWidget {
             },
           ),
         );
+        ConvertFileService().convertFile();
       },
       child: Container(
         padding: const EdgeInsets.all(25),

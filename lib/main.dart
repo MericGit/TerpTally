@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:noteapp/views/chart_view.dart';
 import 'package:noteapp/views/graph_view.dart';
 import 'package:noteapp/views/home_view.dart';
 import 'package:noteapp/views/login_view.dart';
@@ -20,7 +21,7 @@ void main() async {
       routes: {
         '/login/': (context) => const LoginView(),
         '/home/': (context) => const HomeView(),
-        '/graph/': (context) => const GraphView(),
+        '/graph/': (context) => const PieChart(title: 'Graph'),
       },
     ),
   );
@@ -29,7 +30,7 @@ void main() async {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
