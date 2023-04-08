@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "683712281052",
+    "project_id": "terpserv",
+    "storage_bucket": "terpserv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683712281052:android:db702f5f1082068abdb719",
+        "android_client_info": {
+          "package_name": "com.example.terpserv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683712281052-i2r12m1naqdkh131mv61i1h37106e28p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUi633X39M5w-zisnFGDGhyKL6yGnasbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683712281052-i2r12m1naqdkh131mv61i1h37106e28p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
