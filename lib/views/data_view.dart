@@ -42,6 +42,9 @@ class DataViewState extends State<DataView> {
       case 3:
         chart = CatShop(title: title);
         break;
+      case 4:
+        chart = MonthBarChart(title: title);
+        break;
       default:
         chart = CategoryBarChart(title: title);
     }
@@ -118,6 +121,7 @@ class DataViewState extends State<DataView> {
                     buildDataPage('Page 2', Colors.green, currentPage == 1),
                     buildDataPage('Page 3', Colors.red, currentPage == 2),
                     buildDataPage('Page 4', Colors.yellow, currentPage == 3),
+                    buildDataPage('page 5', Colors.orange, currentPage == 4),
                   ],
                 ),
               ),
