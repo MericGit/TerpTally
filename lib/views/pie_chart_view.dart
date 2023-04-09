@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:noteapp/services/data_download_service.dart';
+
+List<String> typeList = [];
+List<String> totalList = [];
 
 class PieChart extends StatefulWidget {
   const PieChart({Key? key, required this.title}) : super(key: key);
@@ -11,66 +15,74 @@ class PieChart extends StatefulWidget {
 }
 
 class PieChartState extends State<PieChart> {
-  late List<ExpenseData> _chartData;
   late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
-    _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SfCircularChart(
-      backgroundColor: Color(0xFF111003),
-      tooltipBehavior: _tooltipBehavior,
-      series: <CircularSeries>[
-        DoughnutSeries<ExpenseData, String>(
-          dataSource: _chartData,
-          xValueMapper: (ExpenseData data, _) => data.type,
-          yValueMapper: (ExpenseData data, _) =>
-              int.parse(data.total.substring(1)),
-          dataLabelMapper: (ExpenseData data, _) =>
-              (data.type + "\n" + data.total),
-          dataLabelSettings: const DataLabelSettings(
-              isVisible: true,
-              labelAlignment: ChartDataLabelAlignment.top,
-              overflowMode: OverflowMode.hide,
-              connectorLineSettings: ConnectorLineSettings(width: 0),
-              textStyle: TextStyle(color: Color(0xFFE9E7EF))),
-          enableTooltip: true,
-          animationDelay: 500,
-          animationDuration: 2500,
-        )
-      ],
+    return FutureBuilder<List<ExpenseData>>(
+      future: getChartData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error loading data"));
+        }
+        if (!snapshot.hasData) {
+          return const Center(child: Text("No data"));
+        }
+        return SfCircularChart(
+          backgroundColor: const Color(0xFF4AAD52),
+          tooltipBehavior: _tooltipBehavior,
+          series: <CircularSeries>[
+            DoughnutSeries<ExpenseData, String>(
+              dataSource: snapshot.data!,
+              xValueMapper: (ExpenseData data, _) => data.type,
+              yValueMapper: (ExpenseData data, _) => data.total,
+              dataLabelMapper: (ExpenseData data, _) => data.type,
+              dataLabelSettings: const DataLabelSettings(
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.top,
+                  overflowMode: OverflowMode.hide,
+                  connectorLineSettings: ConnectorLineSettings(width: 0),
+                  textStyle: TextStyle(color: Color(0xFFE9E7EF))),
+              enableTooltip: true,
+              animationDelay: 500,
+              animationDuration: 2500,
+            )
+          ],
+        );
+      },
     );
   }
 
-  List<ExpenseData> getChartData() {
-    final List<ExpenseData> chartData = [
-      ExpenseData('Education', "\$1600"),
-      ExpenseData('Entertainment', "\$2490"),
-      ExpenseData('Fees & Adjustments', "\$2900"),
-      ExpenseData('Food & Drink', "\$23050"),
-      ExpenseData('Gas', "\$24880"),
-      ExpenseData('Groceries', "\$34390"),
-      ExpenseData('Health & Wellness', "\$1600"),
-      ExpenseData('Home', "\$2490"),
-      ExpenseData('Personal', "\$2900"),
-      ExpenseData('Professional Services', "\$23050"),
-      ExpenseData('Shopping', "\$24880"),
-      ExpenseData('Travel', "\$34390"),
-    ];
-    return chartData;
+  Future<List<ExpenseData>> getChartData() async {
+    DataDownload dataDownload = DataDownload();
+    //print("GETTING DATA");
+    Map<String, dynamic> cateTransactions = await dataDownload.getCate();
+
+    List<ExpenseData> ExpenseList = [];
+
+    for (var item in cateTransactions.entries) {
+      try {
+        ExpenseList.add(ExpenseData(item.key, item.value));
+      } catch (e) {
+        //print(e);
+      }
+    }
+    return ExpenseList;
   }
 }
 
 class ExpenseData {
-  // Transaction Date,Post Date,Description,Category,Type,Amount,Memo
   ExpenseData(this.type, this.total);
+
   final String type;
-  final String total;
-  // final Color pointColor;
+  final double total;
 }

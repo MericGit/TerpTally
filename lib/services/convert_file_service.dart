@@ -27,7 +27,8 @@ class ConvertFileService {
     var endMonth = 0;
     final User? user = FirebaseAuth.instance.currentUser;
     for (int i = 1; i < fields.length; i++) {
-      var amount = fields[i][5];
+      var udate = fields[i][0].split('/')[0];
+      var amount = fields[i][5].abs();
       var category = fields[i][3];
       DateFormat dateFormat = DateFormat("MM/dd/yyyy");
       var date =
@@ -39,23 +40,30 @@ class ConvertFileService {
       if (fields[i][3] != "") {
         var snapshot = await firestore
             .collection('transactions')
+            .where('udate', isEqualTo: udate)
             .where('amount', isEqualTo: amount)
             .where('category', isEqualTo: category)
             .where('date', isEqualTo: date)
             .where('desc', isEqualTo: desc)
             .where('type', isEqualTo: type)
             .get();
-
         if (snapshot.docs.isEmpty) {
           // add the document
-          firestore.collection('transactions').add({
+          var newDocRef = await firestore.collection('transactions').add({
+            'udate': udate,
             'amount': amount,
             'category': category,
             'date': date,
             'desc': desc,
             'type': type
           });
+
+          // Add transaction reference to user's IndvTransactions field
           var userDoc = firestore.collection('Users').doc(user?.email);
+          await userDoc.update({
+            'IndvTransactions': FieldValue.arrayUnion([newDocRef])
+          });
+
           var cataTransactions = (await userDoc.get())['CateTransactions'];
           if (cataTransactions.containsKey(category)) {
             cataTransactions[category] += amount;
