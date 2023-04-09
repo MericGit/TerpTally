@@ -25,10 +25,7 @@ class ConvertFileService {
 
     var startMonth = 12;
     var endMonth = 0;
-
-    // Get current user
     final User? user = FirebaseAuth.instance.currentUser;
-
     for (int i = 1; i < fields.length; i++) {
       var amount = fields[i][5];
       var category = fields[i][3];
@@ -40,7 +37,7 @@ class ConvertFileService {
 
       // check if a document with similar fields already exists
       if (fields[i][3] != "") {
-        QuerySnapshot snapshot = await firestore
+        var snapshot = await firestore
             .collection('transactions')
             .where('amount', isEqualTo: amount)
             .where('category', isEqualTo: category)
@@ -49,28 +46,24 @@ class ConvertFileService {
             .where('type', isEqualTo: type)
             .get();
 
-        if (snapshot.docs.length > 0) {
-          // Document already exists, do not add it again
-          continue;
-        }
-
-        // Add the document
-        var newDocRef = await firestore.collection('transactions').add({
-          'amount': amount,
-          'category': category,
-          'date': date,
-          'desc': desc,
-          'type': type
-        });
-
-        // Add transaction reference to user's IndvTransactions field
-        if (user != null) {
-          var userDocRef = firestore.collection('Users').doc(user.email);
-          await userDocRef.update({
-            'IndvTransactions': FieldValue.arrayUnion([newDocRef])
+        if (snapshot.docs.isEmpty) {
+          // add the document
+          firestore.collection('transactions').add({
+            'amount': amount,
+            'category': category,
+            'date': date,
+            'desc': desc,
+            'type': type
           });
+          var userDoc = firestore.collection('Users').doc(user?.email);
+          var cataTransactions = (await userDoc.get())['CateTransactions'];
+          if (cataTransactions.containsKey(category)) {
+            cataTransactions[category] += amount;
+          } else {
+            cataTransactions[category] = amount;
+          }
+          await userDoc.update({'CateTransactions': cataTransactions});
         }
-
         if (groupedTransactionsNum[fields[i][3]] == null) {
           groupedTransactionsNum[fields[i][3]] = 1;
           groupedTransactionsTotal[fields[i][3]] = 0 - fields[i][5];

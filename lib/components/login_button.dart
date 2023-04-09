@@ -13,7 +13,7 @@ class LoginButton extends StatelessWidget {
         final FirebaseAuth auth = FirebaseAuth.instance;
         AuthService().signInWithGoogle();
         if (auth.currentUser != null) {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 600),
               pageBuilder: (context, animation, secondaryAnimation) =>
