@@ -1,16 +1,8 @@
-# noteapp
+# TerpTally
 
-A new Flutter project.
+A flutter based mobile app created for BitCamp 2023 Hackathon @ UMD
 
-## Getting Started
+Read more about it in our devpost!
+https://devpost.com/software/terptally
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
